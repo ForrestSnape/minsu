@@ -1,0 +1,110 @@
+{include file="mobile/_header"}
+<div class="page">
+        <div class="page__bd page__bd_spacing">
+            <a href="javascript:;" class="weui-btn weui-btn_default" id="showIOSActionSheet">订单</a>
+        </div>
+        <div class="weui-tab">
+            <div class="weui-navbar">
+                {foreach $rooms as $key => $room}
+                    <div href="{$room.id}" class="weui-navbar__item {eq name='key' value='0'}weui-bar__item_on{/eq}" data-room_id="{$room.id}">
+                        {$room.name}
+                    </div>
+                {/foreach}
+            </div>
+            <div class="weui-tab__panel">
+            </div>
+        </div>
+        
+        <div>
+            <div class="weui-mask" id="iosMask" style="display: none"></div>
+            <div class="weui-actionsheet" id="iosActionsheet">
+                <div class="weui-actionsheet__menu">
+                    <div class="weui-actionsheet__cell">
+                        <a href="{:url('mobile.index/index')}">首页</a>
+                    </div>
+                    <div class="weui-actionsheet__cell">
+                        <a href="{:url('mobile.order/index')}">订单</a>
+                    </div>
+                    <div class="weui-actionsheet__cell">房间</div>
+                    <div class="weui-actionsheet__cell">统计</div>
+                </div>
+                <div class="weui-actionsheet__action">
+                    <div class="weui-actionsheet__cell" id="iosActionsheetCancel">取消</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="__JS__/jquery.min.js?v=2.1.4"></script>
+    <script type="text/javascript">
+        $(function(){
+            //弹窗导航
+            var $iosActionsheet = $('#iosActionsheet');
+            var $iosMask = $('#iosMask');
+            function hideActionSheet() {
+                $iosActionsheet.removeClass('weui-actionsheet_toggle');
+                $iosMask.fadeOut(200);
+            }
+            $iosMask.on('click', hideActionSheet);
+            $('#iosActionsheetCancel').on('click', hideActionSheet);
+            $("#showIOSActionSheet").on("click", function(){
+                $iosActionsheet.addClass('weui-actionsheet_toggle');
+                $iosMask.fadeIn(200);
+            });
+            
+            //初始化数据
+            fillPanel($('.weui-bar__item_on').get(0).dataset.room_id);
+            
+            //切换房间tab
+            $('.weui-navbar__item').on('click', function () {
+                var that = $(this);
+                that.addClass('weui-bar__item_on').siblings('.weui-bar__item_on').removeClass('weui-bar__item_on');
+                fillPanel(that.get(0).dataset.room_id)
+            });
+        });
+        function fillPanel(room_id){
+            //清空面板值 显示loading
+            $('.weui-tab__panel').empty().append(`
+                <div class="weui-loadmore">
+                    <i class="weui-loading"></i>
+                    <span class="weui-loadmore__tips">正在加载</span>
+                </div>
+            `);
+            var url = "{:url('mobile.order/ajax_getOrders')}";
+            var data = {
+                'room_id':room_id
+            };
+            $.post(url, data, function(res){
+                if(res.code == 1){
+                    var html = getPanelData(res.data);
+                    $('.weui-tab__panel').empty().append(html);
+                }else{
+                    
+                }
+            })
+        }
+        function getPanelData(orders){
+            var html = '';
+            for(var i = 0; i < orders.length; i++){
+                var order = orders[i];
+                html += `
+                <div class="weui-panel weui-panel_access">
+                    <div class="weui-panel__hd weui-media-box__title">`+order.begin + ' - ' + order.end +`</div>
+                    <div class="weui-panel__bd">
+                        <div class="weui-media-box weui-media-box_text">
+                            <p class="weui-media-box__desc">平台：` + order.platform.name + `</p>
+                            <p class="weui-media-box__desc">天数：` + order.days + `</p>
+                            <p class="weui-media-box__desc">总价：` + order.total_price + `</p>
+                        </div>
+                    </div>
+                    <div class="weui-panel__ft">
+                        <a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+                            <div class="weui-cell__bd">查看更多</div>
+                            <span class="weui-cell__ft"></span>
+                        </a>    
+                    </div>
+                </div>`;
+            }
+            return html;
+        }
+    </script>
+{include file="mobile/_footer"}

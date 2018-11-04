@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房间详情</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRightBig">
+        <div class="row">
+            <div class="col-sm-5">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>房间</h5>
+                    </div>
+                    <div class="ibox-content no-padding border-left-right">
+                        <img alt="image" class="img-responsive" src="{$room.photo}">
+                    </div>
+                    <div class="ibox-content profile-content">
+                        <h4><strong>{$room.name}</strong></h4>
+                        <p><i class="fa fa-map-marker"></i> {$room.address}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>照片</h5>
+                        <div class="ibox-tools">
+                            <a href="{:url('room/images')}?id={$room.id}">
+                                查看更多照片
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content ">
+                        <div class="carousel slide" id="carousel2">
+                            <ol class="carousel-indicators">
+                                {foreach $images as $key => $image}
+                                    <li data-slide-to="0" data-target="#carousel2" class="{eq name='key' value='0'}active{/eq}"></li>
+                                {/foreach}
+                            </ol>
+                            <div class="carousel-inner">
+                                {foreach $images as $key => $image}
+                                    <div class="item {eq name='key' value='0'}active{/eq}">
+                                        <img alt="image" class="img-responsive" src="{$image.img}">
+                                        <div class="carousel-caption">
+                                            <p>{$image.description}</p>
+                                        </div>
+                                    </div>
+                                {/foreach}
+                                <a data-slide="prev" href="#carousel2" class="left carousel-control">
+                                    <span class="icon-prev"></span>
+                                </a>
+                                <a data-slide="next" href="#carousel2" class="right carousel-control">
+                                    <span class="icon-next"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>最新点评</h5>
+                        <div class="ibox-tools">
+                            <a href="{:url('room/comments')}?id={$room.id}">
+                                查看更多点评
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {foreach $comments as $key => $comment}
+                    <div class="social-feed-box">
+                        <div class="social-avatar">
+                            <a href="javascript:void(0)" class="pull-left">
+                                <img alt="image" src="{$comment.platform_photo}">
+                            </a>
+                            <div class="ibox-tools">
+                                <a href="{:url('order/detail')}?id={$comment.order_id}">
+                                    查看订单
+                                    <i class="fa fa-arrow-right"></i>
+                                </a> 
+                            </div>
+                            <div class="media-body">
+                                <h4>星级:
+                                    {for start="0" end="$comment.star"}
+                                        <i class="fa fa-star" style="color: gold"></i>
+                                    {/for}
+                                </h4>
+                                <h4 class="text-muted">{$comment.comment_time|date="Y.m.d H:i:s",###} 来自 {$comment.platform_name}</h4>
+                            </div>
+                        </div>
+                        <div class="social-body">
+                            <h4>{$comment.comment}</h4>
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
+            <div class="col-sm-5">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>时间轴</h5>
+                        <a href="javascript:void(0)" class="btn btn-xs btn-primary pull-right" id="leftVersion">布局切换</a>
+                    </div>
+                    <div class="ibox-content">
+                        <div id="vertical-timeline" class="vertical-container center-orientation">
+                            {foreach $orders as $order}
+                                <div class="vertical-timeline-block">
+                                    <div class="vertical-timeline-icon navy-bg">
+                                        <i class="fa fa-briefcase"></i>
+                                    </div>
+                                    <div class="vertical-timeline-content">
+                                        <h2>订单</h2>
+                                        <p>平台：{$order.platform.name}</p><p>入住时间：{$order.begin|date="Y.m.d",###} - {$order.end|date="m.d",###}</p>
+                                        <a href="{:url('order/detail')}?id={$order.id}" class="btn btn-sm btn-primary">查看订单</a>
+                                        <span class="vertical-date">
+                                            <small>{$order.begin|date="m.d",###}</small>
+                                        </span>
+                                    </div>
+                                </div>
+                            {/foreach}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/validate/messages_zh.min.js"></script>
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+<script>
+    $('#leftVersion').click(function (event) {
+                event.preventDefault()
+                $('#vertical-timeline').toggleClass();
+            });
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房间详情</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRightBig">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>点评 - {$room.name}</h5>
+                    </div>
+                </div>
+                {foreach $comments as $key => $comment}
+                    <div class="social-feed-box">
+                        <div class="social-avatar">
+                            <a href="" class="pull-left">
+                                <img alt="image" src="{$comment.platform_photo}">
+                            </a>
+                            <div class="ibox-tools">
+                                <a href="{:url('order/detail')}?id={$comment.order_id}">
+                                    查看订单
+                                    <i class="fa fa-arrow-right"></i>
+                                </a> 
+                            </div>
+                            <div class="media-body">
+                                <h4>星级:
+                                    {for start="0" end="$comment.star"}
+                                        <i class="fa fa-star" style="color: gold"></i>
+                                    {/for}
+                                </h4>
+                                <h4 class="text-muted">{$comment.comment_time|date="Y.m.d H:i:s",###} 来自 {$comment.platform_name}</h4>
+                            </div>
+                        </div>
+                        <div class="social-body">
+                            <h4>{$comment.comment}</h4>
+                        </div>
+                    </div>
+                {/foreach}
+            </div>
+        </div>
+    </div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/validate/messages_zh.min.js"></script>
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+</body>
+</html>

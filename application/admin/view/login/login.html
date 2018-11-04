@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>民宿管理系统</title>
+    <link href="__CSS__/bootstrap.min.css" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css" rel="stylesheet">
+    <link href="__CSS__/login.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    <script>
+        if(window.top!==window.self){window.top.location=window.location};
+    </script>
+
+</head>
+
+<body class="signin">
+<div class="signinpanel">
+    <div class="row">
+        <div class="col-sm-7">
+        </div>
+        <div class="col-sm-5">
+            <form method="post" action="index.html">
+                <p class="m-t-md" id="err_msg">民宿管理</p>
+                <input type="text" class="form-control uname" placeholder="账号" id="username" />
+                <input type="password" class="form-control pword m-b" placeholder="密码" id="password" />
+                <input class="btn btn-primary btn-block" id="login_btn" value="登录"/>
+                <div class="sk-spinner sk-spinner-wave" style="display: none">
+                    <div class="sk-rect1"></div>
+                    <div class="sk-rect2"></div>
+                    <div class="sk-rect3"></div>
+                    <div class="sk-rect4"></div>
+                    <div class="sk-rect5"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="signup-footer">
+        <div class="pull-right">
+            &copy; Designed by Forrest.
+        </div>
+    </div>
+                    
+</div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script type="text/javascript">
+    document.onkeydown=function(event){
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==13){ // enter 键
+            $('#login_btn').click();
+        }
+    };
+    var lock = false;
+    $(function () {
+        $('#login_btn').click(function(){
+            if(lock) return;
+            lock = true;
+            $('#login_btn').hide();
+            $('.sk-spinner-wave').show();
+            var url = "{:url('login/doLogin')}";
+            var data = {
+                "username":$('#username').val(),
+                "password":$('#password').val(),
+            }
+            $.post(url, data, function(res){
+                lock = false;
+                if(res.code != 1){
+                    parent.layer.alert(res.msg, {
+                        skin: 'layui-layer-molv', //样式类名
+                        shift: 6 //动画类型
+                    }, function(index){
+                        $('.sk-spinner-wave').hide();
+                        $('#login_btn').show();
+                        layer.close(index);
+                    });
+                    return;
+                }else{
+                    window.location.href = res.data;
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

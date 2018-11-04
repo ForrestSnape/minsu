@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台首页</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__CSS__/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__CSS__/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="__CSS__/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInUpBig">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>订单信息</h4>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>参数</th>
+                                <th>信息</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>起止日期：</td>
+                                <td>{$order.begin|date="Y.m.d",###} - {$order.end|date="m.d",###}</td>
+                            </tr>
+                            <tr>
+                                <td>天数：</td>
+                                <td>{$order.days}</td>
+                            </tr>
+                            <tr>
+                                <td>房间：</td>
+                                <td>{$order.room.name}</td>
+                            </tr>
+                            <tr>
+                                <td>平台：</td>
+                                <td>{$order.platform.name}</td>
+                            </tr>
+                            <tr>
+                                <td>订单总价：</td>
+                                <td>{$order.total_price}</td>
+                            </tr>
+                            <tr>
+                                <td>平台抽成：</td>
+                                <td>{$order.deduct_price}</td>
+                            </tr>
+                            <tr>
+                                <td>订单利润：</td>
+                                <td>{$order.profit_price}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>日期-金额</h4>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>金额</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $order_date_prices as $order_date_price}
+                                <tr>
+                                    <td>{$order_date_price.begin|date="Y.m.d",###} - {$order_date_price.end|date="m.d",###}</td>
+                                    <td>{$order_date_price.price}</td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>订单点评</h4>
+                </div>
+                <div class="ibox-content">
+                    {if condition="$order.comment"}
+                        <div class="social-body">
+                            <h4>星级：
+                                {for start="0" end="$order.comment.star"}
+                                    <i class="fa fa-star" style="color: gold"></i>
+                                {/for}
+                            </h4>
+                            <h4>点评：{$order.comment.comment}</h4>
+                            <h4 class="text-muted pull-right">{$order.comment.comment_time|date="Y.m.d H:i:s",###} 来自 {$order.platform.name}</h4>
+                        </div>
+                    {else /}
+                        暂无点评 
+                        <button class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addComment">点击添加 <i class="fa fa-arrow-right"></i></button>
+                    {/if}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h4>客人信息</h4>
+                </div>
+                <div class="ibox-content">
+                    {if condition="$order.customer"}
+                    {else /}
+                        客人还未注册
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 添加点评模态框 -->
+<div class="modal fade" id="addComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    添加点评
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    星级：
+                    <input type="text" placeholder="必须为 1-5 中的一个" class="form-control comment-star">
+                </div>
+                <div class="form-group">
+                    时间：
+                    <input type="text" placeholder="必须为 xxxx-xx-xx xx:xx:xx 格式" class="form-control comment-comment_time">
+                </div>
+                <div class="form-group">
+                    点评：
+                    <input type="text" placeholder="请填写点评内容" class="form-control comment-comment">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default btn-add-comment-cancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="btn-add-comment">确定</button>
+                <div class="sk-spinner sk-spinner-cube-grid" style="display:none">
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                    <div class="sk-cube"></div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="__JS__/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/hplus.min.js?v=4.1.0"></script>
+<!--<script type="text/javascript" src="__JS__/contabs.min.js"></script>-->
+<script type="text/javascript" src="__JS__/contabs.js"></script>
+<script src="__JS__/plugins/pace/pace.min.js"></script>
+<script type="text/javascript">
+    $('#btn-add-comment').on('click', function(){
+        //加载动画
+        $('.btn-add-comment-cancel').hide();
+        $('#btn-add-comment').hide();
+        $('.sk-spinner-cube-grid').show();
+        var url = "{:url('comment/add')}";
+        var data = {
+            'order_id':'{$order.id}',
+            'room_id':'{$order.room.id}',
+            'star':$('.comment-star').val(),
+            'comment_time':$('.comment-comment_time').val(),
+            'comment':$('.comment-comment').val()
+        }
+        $.post(url, data, function(res){
+            if(res.code == 1){
+                window.location.reload();
+            }
+        })
+    })
+</script>
+</body>
+</html>

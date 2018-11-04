@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>房间统计分析</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="__CSS__/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated rubberBand">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="tabs-container">
+                <ul class="nav nav-tabs">
+                    {foreach $rooms as $key => $room}
+                        <li class="{eq name='key' value='0'}active{/eq} li-tabs" data-room_id="{$room.id}" data-clicked="{eq name='key' value='0'}1{else/}0{/eq}">
+                            <a data-toggle="tab" href="#tab-{$room.id}" aria-expanded="{eq name='key' value='0'}true{/eq}"><el class="fa fa-home"></el> {$room.name}</a>
+                        </li>
+                    {/foreach}
+                </ul>
+                <div class="tab-content">
+                    {foreach $rooms as $key => $room}
+                        <div id="tab-{$room.id}" class="tab-pane {eq name='key' value='0'}active{/eq}">
+                            <div class="panel-body">
+                                <div class="col-sm-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <div class="input-group date month-order-bar-date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control month-order-bar-date-input" value="{$y_m_str}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content month-order-bar-content" data-room_id="{$room.id}">
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                            <div class="echarts" style="display: none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <div class="input-group date month-platform-pie-date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control month-platform-pie-date-input" value="{$y_m_str}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content month-platform-pie-content" data-room_id="{$room.id}">
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                            <div class="echarts" style="display: none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <div class="input-group date year-order-line-date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control year-order-line-date-input" value="{$y_str}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content year-order-line-content" data-room_id="{$room.id}">
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                            <div class="echarts" style="display: none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title">
+                                            <div class="input-group date year-platform-pie-date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control year-platform-pie-date-input" value="{$y_str}" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content year-platform-pie-content" data-room_id="{$room.id}">
+                                            <div class="sk-spinner sk-spinner-wave">
+                                                <div class="sk-rect1"></div>
+                                                <div class="sk-rect2"></div>
+                                                <div class="sk-rect3"></div>
+                                                <div class="sk-rect4"></div>
+                                                <div class="sk-rect5"></div>
+                                            </div>
+                                            <div class="echarts" style="display: none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/validate/messages_zh.min.js"></script>
+<script src="__JS__/plugins/iCheck/icheck.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+<script src="__JS__/plugins/echarts/echarts-all.js"></script>
+<script src="__JS__/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script>
+    var room_id = 1;
+
+    //页面初始化执行方法
+    var date = new Date();
+    var cur_year = date.getFullYear();
+    var cur_month = date.getMonth() + 1;
+    changeMonthForOrderBar(cur_month);
+    changeMonthForPlatformPie(cur_month);
+    changeYearForOrderLine(cur_year);
+    changeYearForPlatformPie(cur_year);
+
+    //切换tab动作
+    $('.li-tabs').each(function(i, e){
+        var this_e = $(this);
+        this_e.on('click', function(){
+            room_id = e.dataset.room_id;
+            if(e.dataset.clicked == 0){
+                changeMonthForOrderBar(cur_month);
+                changeMonthForPlatformPie(cur_month);
+                changeYearForOrderLine(cur_year);
+                changeYearForPlatformPie(cur_year);
+                e.dataset.clicked = 1;
+            }
+        })
+    });
+    
+    // 月份-订单-柱状图日期选择动作
+    $('.month-order-bar-date').each(function(i, e){
+        $(this).datepicker({
+            minViewMode: 1,
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true,
+            format:"yyyy-mm"
+        }).on('changeDate', function(){
+            var month = $(this).children('.month-order-bar-date-input').val().substr(5) - 0;
+            changeMonthForOrderBar(month)
+        });
+    });
+    //月份-订单-柱状图切换月份动作
+    function changeMonthForOrderBar(month){
+        $('.month-order-bar-content').each(function(i, e){
+            if(e.dataset.room_id == room_id){
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('analysis/ajax_getMonthOrderBarData')}";
+                var data = {
+                    "room_id": room_id,
+                    "month": month
+                }
+                $.post(url, data, function(res){
+                    var info = JSON.parse(res);
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createMonthOrderBar(this_e.children('.echarts'), info);
+                })
+            }
+        });
+    }
+    //月份-订单-柱状图数据填充
+    function createMonthOrderBar(e, data){
+        var barChart = echarts.init(e.get(0));
+        var baroption = {
+            title : {
+                text: '月订单统计'
+            },
+            tooltip : {
+                trigger: 'axis',
+                formatter: '{a0}: {c0}<br />{a1}: {c1}<br />{a2}: {c2}<br />{a3}: {c3}'
+            },
+            legend: {
+                data:['订单日期','订单天数','订单金额','利润金额']
+            },
+            grid:{
+                x:40,
+                x2:40,
+                y2:24 
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    data : data.x_data
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value'
+                }
+            ],
+            series : [
+                {
+                    name:'订单日期',
+                    type:'bar',
+                    data:data.y_date
+                },
+                {
+                    name:'订单天数',
+                    type:'bar',
+                    data:data.y_days
+                },
+                {
+                    name:'订单金额',
+                    type:'bar',
+                    data:data.y_total_price
+                },
+                {
+                    name:'利润金额',
+                    type:'bar',
+                    data:data.y_profit_price
+                }
+            ]
+        };
+        barChart.setOption(baroption);
+        window.onresize = barChart.resize;
+    }
+
+    //月份-平台-饼状图日期选择动作
+    $('.month-platform-pie-date').each(function(i, e){
+        $(this).datepicker({
+            minViewMode: 1,
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            todayHighlight: true,
+            format:"yyyy-mm"
+        }).on('changeDate', function(){
+            var month = $(this).children('.month-platform-pie-date-input').val().substr(5) - 0;
+            changeMonthForPlatformPie(month)
+        });
+    });
+    //月份-平台-饼状图切换月份动作
+    function changeMonthForPlatformPie(month){
+        $('.month-platform-pie-content').each(function(i, e){
+            if(e.dataset.room_id == room_id){
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('analysis/ajax_getMonthPlatformPieData')}";
+                var data = {
+                    "room_id": room_id,
+                    "month": month
+                }
+                $.post(url, data, function(res){
+                    var info = JSON.parse(res);
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createMonthPlatformPie(this_e.children('.echarts'), info);
+                })
+            }
+        });
+    }
+    //月份-平台-饼状图数据填充
+    function createMonthPlatformPie(e, data){
+        var pieChart = echarts.init(e.get(0));
+        var pieoption = {
+            title : {
+                text: '月平台统计',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:data.platforms
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'订单来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:data.series
+                }
+            ]
+        };
+        pieChart.setOption(pieoption);
+        $(window).resize(pieChart.resize);
+    }
+
+    //年份-订单-折线图日期选择动作
+    $('.year-order-line-date').each(function(i, e){
+        $(this).datepicker({
+            startView: 2,
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format:"yyyy"
+        }).on('changeDate', function(){
+            var year = $(this).children('.year-order-line-date-input').val() - 0;
+            changeYearForOrderLine(year)
+        });
+    });
+    //年份-订单-折线图切换月份动作
+    function changeYearForOrderLine(year){
+        $('.year-order-line-content').each(function(i, e){
+            if(e.dataset.room_id == room_id){
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('analysis/ajax_getYearOrderLineData')}";
+                var data = {
+                    "room_id": room_id,
+                    "year": year
+                }
+                $.post(url, data, function(res){
+                    var info = JSON.parse(res);
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createYearOrderLine(this_e.children('.echarts'), info);
+                })
+            }
+        });
+    }
+    //年份-订单-折线图数据填充
+    function createYearOrderLine(e, data){
+        var lineChart = echarts.init(e.get(0));
+        var lineoption = {
+            title : {
+                text: '年订单统计'
+            },
+            tooltip : {
+                trigger: 'axis',
+                formatter: '{a0}: {c0}<br />{a1}: {c1}<br />{a2}: {c2}<br />{a3}: {c3}'
+            },
+            legend: {
+                data:['订单数', '天数', '订单金额', '利润金额']
+            },
+            grid:{
+                x:40,
+                x2:40,
+                y2:24
+            },
+            calculable : true,
+            xAxis : [
+                {
+                    type : 'category',
+                    boundaryGap : false,
+                    data : data.x_data
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                }
+            ],
+            series : [
+                {
+                    name:'订单数',
+                    type:'line',
+                    data:data.y_orders_num
+                },
+                {
+                    name:'天数',
+                    type:'line',
+                    data:data.y_total_days
+                },
+                {
+                    name:'订单金额',
+                    type:'line',
+                    data:data.y_total_price
+                },
+                {
+                    name:'利润金额',
+                    type:'line',
+                    data:data.y_profit_price
+                },
+            ]
+        };
+        lineChart.setOption(lineoption);
+        $(window).resize(lineChart.resize);
+    }
+
+    //年份-平台-饼状图日期选择动作
+    $('.year-platform-pie-date').each(function(i, e){
+        $(this).datepicker({
+            startView: 2,
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            autoclose: true,
+            format:"yyyy"
+        }).on('changeDate', function(){
+            var year = $(this).children('.year-platform-pie-date-input').val() - 0;
+            changeYearForPlatformPie(year)
+        });
+    });
+    //年份-平台-饼状图切换月份动作
+    function changeYearForPlatformPie(year){
+        $('.year-platform-pie-content').each(function(i, e){
+            if(e.dataset.room_id == room_id){
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('analysis/ajax_getYearPlatformPieData')}";
+                var data = {
+                    "room_id": room_id,
+                    "year": year
+                }
+                $.post(url, data, function(res){
+                    var info = JSON.parse(res);
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createYearPlatformPie(this_e.children('.echarts'), info);
+                })
+            }
+        });
+    }
+    //年份-平台-饼状图数据填充
+    function createYearPlatformPie(e, data){
+        var pieChart = echarts.init(e.get(0));
+        var pieoption = {
+            title : {
+                text: '年平台统计',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient : 'vertical',
+                x : 'left',
+                data:data.platforms
+            },
+            calculable : true,
+            series : [
+                {
+                    name:'订单来源',
+                    type:'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:data.series
+                }
+            ]
+        };
+        pieChart.setOption(pieoption);
+        $(window).resize(pieChart.resize);
+    }
+</script>
+</body>
+</html>

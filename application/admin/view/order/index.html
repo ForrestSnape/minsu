@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订单列表</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__CSS__/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__CSS__/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="__CSS__/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated slideInDown">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>所有订单</h5>
+                    <div class="ibox-tools">
+                        <button class="btn btn-info btn-xs btn-refresh-all">全部订单 <i class="fa fa-refresh"></i></button>
+                        <a href="{:url('order/add')}" class="btn btn-primary btn-xs">添加订单</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row m-b-sm m-t-sm">
+                        <form method="POST" action="{:url('order/index')}">
+                            <div class="col-md-3">
+                                <div class="form-group" id="order_date">
+                                    <div class="input-daterange input-group" id="datepicker">
+                                        <input id="date-begin" type="text" class="input-sm form-control" name="begin" value="{if condition='$query_begin'}{$query_begin}{else /}开始日期{/if}" />
+                                        <span class="input-group-addon">到</span>
+                                        <input id="date-end" type="text" class="input-sm form-control" name="end" value="{if condition='$query_end'}{$query_end}{else /}结束日期{/if}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select id="select-room" name="room_id" data-placeholder="选择房间" class="chosen-select" style="width:200px;;" tabindex="1">
+                                            <option value="0">全部房间</option>
+                                            {foreach $rooms as $key => $room}
+                                                <option value="{$room.id}" {if condition='$query_room_id eq $room.id'}selected='selected'{/if}>{$room.name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <select id="select-platform" name="platform_id" data-placeholder="选择平台" class="chosen-select" style="width:200px;" tabindex="1">
+                                            <option value="0">全部平台</option>
+                                            {foreach $platforms as $key => $platform}
+                                                <option value="{$platform.id}" {if condition='$query_platform_id eq $platform.id'}selected='selected'{/if}>{$platform.name}</option>
+                                            {/foreach}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <button id="btn-submit" class="btn btn-primary">查询订单 <i class="fa"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>订单ID</th>
+                                <th>时间</th>
+                                <th>房间</th>
+                                <th>平台</th>
+                                <th>总价</th>
+                                <th>平台抽成</th>
+                                <th>利润</th>
+                                <th>状态</th>
+                                <th>客人信息</th>
+                                <th>客人点评</th>
+                                <th>操 作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {volist name="orders" id="order"}
+                                <tr>
+                                    <td>{$order.id}</td>
+                                    <td>{$order.begin|date="Y.m.d",###} - {$order.end|date="m.d",###} 共计{$order.days}天</td>
+                                    <td>{$order.room.name}</td>
+                                    <td>{$order.platform.name}</td>
+                                    <td>{$order.total_price}</td>
+                                    <td>{$order.deduct_price}</td>
+                                    <td>{$order.profit_price}</td>
+                                    <td><button class="btn btn-xs 
+                                        {eq name='$order.use_status' value='待入住'} btn-info{/eq}
+                                        {eq name='$order.use_status' value='入住中'} btn-warning{/eq}
+                                        {eq name='$order.use_status' value='已完成'} btn-primary{/eq}
+                                        ">{$order.use_status}</button></td>
+                                    <td>
+                                        {if condition="$order.customer.nickname"}
+                                            <button class="btn btn-info btn-xs"><i class="fa fa-user"></i> {$order.customer.nickname}</button>
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        {if condition="$order.comment"}
+                                            {for start="0" end="$order.comment.star"}
+                                                <i class="fa fa-star" style="color: gold"></i>
+                                            {/for}<br>
+                                            <button class="btn btn-info btn-xs btn-see-comment" data-comment="{$order.comment.comment}">查看点评 <i class="fa fa-arrow-right"></i></button>
+                                        {else /}
+                                            暂无点评
+                                        {/if}
+                                    </td>
+                                    <td>
+                                        <a href="{:url('order/detail')}?id={$order.id}">
+                                            <button class="btn btn-primary btn-xs">查看</button>
+                                        </a>
+                                        <button class="btn btn-success btn-xs">编辑</button>
+                                        <button class="btn btn-danger btn-xs btn-delete" data-order_id="{$order.id}">删除</button>
+                                    </td>
+                                </tr>
+                            {/volist}
+                        </tbody>
+                    </table>
+                    {$orders->render()}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+<script src="__JS__/plugins/chosen/chosen.jquery.js"></script>
+<script src="__JS__/plugins/switchery/switchery.js"></script>
+<script src="__JS__/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script>
+    //查看点评动作
+    $('.btn-see-comment').on('click', function(){
+        parent.layer.alert($(this).get(0).dataset.comment, {
+            skin: 'layui-layer-molv', //样式类名
+            shift: 4 //动画类型
+        }, function(index){
+            parent.layer.close(index);
+        });
+    })
+    // 全局变量
+    var begin = 0;
+    var end = 0;
+    var room_id = 0;
+    var platform_id = 0;
+    var customer_id = 0;
+
+    // 日期选择动作
+    $('#order_date .input-daterange').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true
+    });
+     
+    // 下拉框
+    var config = {
+        '.chosen-select': {},
+        '.chosen-select-deselect': {
+            allow_single_deselect: true
+        },
+        '.chosen-select-no-single': {
+            disable_search_threshold: 10
+        },
+        '.chosen-select-no-results': {
+            no_results_text: '找不到呀!'
+        },
+        '.chosen-select-width': {
+            width: "95%"
+        }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+    //刷新列表 初始化
+    $('.btn-refresh-all').on('click', function(){
+        $(this).children('.fa').addClass('fa-spin');
+        window.location.href = "{:url('order/index')}";
+    })
+
+    //提交表单动画
+    $('#btn-submit').on('click', function(){
+        $(this).children('.fa').addClass('fa-spinner fa-spin');
+    })
+
+    //删除订单动作
+    $('.btn-delete').on('click', function(){
+        var order_id = $(this).get(0).dataset.order_id;
+        parent.layer.confirm('确定删除吗？亲~', {
+            btn: ['确定','取消'], //按钮
+            shade: false //不显示遮罩
+        }, function(){
+            parent.layer.msg('稍等，正在删除...');
+            var url = "{:url('order/doDelete')}";
+            var data = {'id':order_id}
+            $.post(url, data, function(res){
+                if(res.code == 1){
+                    parent.layer.msg('删除成功');
+                    window.location.reload();
+                }
+            })
+        }, function(){
+        });
+    })
+
+
+    </script>
+</body>
+</html>

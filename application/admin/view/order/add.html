@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加订单</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="__CSS__/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="__CSS__/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="__CSS__/animate.min.css" rel="stylesheet">
+    <link href="__CSS__/plugins/chosen/chosen.css" rel="stylesheet">
+    <link href="__CSS__/plugins/datapicker/datepicker3.css" rel="stylesheet">
+    <link href="__CSS__/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="__CSS__/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated bounceIn">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>选择日期</h5>
+                    <div class="ibox-tools">
+                        <a id="btn-price" href="javascript:void(0)" class="btn btn-primary btn-xs">点击填写每日金额(必填)</a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group" id="order_date">
+                        <div class="input-daterange input-group" id="datepicker">
+                            <input id="date-begin" type="text" class="input-sm form-control" name="begin" value="{$today}" />
+                            <span class="input-group-addon">到</span>
+                            <input id="date-end" type="text" class="input-sm form-control" name="end" value="{$tomorrow}" />
+                        </div>
+                    </div>
+                    <div id="div-date-price"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>选择房间</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select id="select-room" data-placeholder="选择房间" class="chosen-select" style="width:350px;;" tabindex="1">
+                                <option value="0">请选择房间</option>
+                                {foreach $rooms as $key => $room}
+                                    <option value="{$room.id}">{$room.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>选择平台</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select id="select-platform" data-placeholder="选择平台" class="chosen-select" style="width:350px;" tabindex="1">
+                                <option value="0">请选择平台</option>
+                                {foreach $platforms as $key => $platform}
+                                    <option value="{$platform.id}">{$platform.name}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>选择客人</h5>
+                </div>
+                <div class="ibox-content">
+                    <label>客人是否已注册：</label>
+                    <input id="switch-customer" type="checkbox" class="js-switch"/>
+                </div>
+                <div id="div-search-customer" class="input-group"></div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <button id="btn-submit" class="btn btn-primary btn-lg">提 交</button>
+            <div class="sk-spinner sk-spinner-wandering-cubes" style="display: none">
+                <div class="sk-cube1"></div>
+                <div class="sk-cube2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__JS__/jquery.min.js?v=2.1.4"></script>
+<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+<script src="__JS__/content.min.js?v=1.0.0"></script>
+<script src="__JS__/plugins/validate/jquery.validate.min.js"></script>
+<script src="__JS__/plugins/layer/layer.min.js"></script>
+<script src="__JS__/jquery.form.js"></script>
+<script src="__JS__/plugins/chosen/chosen.jquery.js"></script>
+<script src="__JS__/plugins/switchery/switchery.js"></script>
+<script src="__JS__/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script>
+    // 日期选择动作
+    $('#order_date .input-daterange').datepicker({
+        keyboardNavigation: false,
+        forceParse: false,
+        autoclose: true
+    });
+     
+    // 下拉框
+    var config = {
+        '.chosen-select': {},
+        '.chosen-select-deselect': {
+            allow_single_deselect: true
+        },
+        '.chosen-select-no-single': {
+            disable_search_threshold: 10
+        },
+        '.chosen-select-no-results': {
+            no_results_text: '找不到呀!'
+        },
+        '.chosen-select-width': {
+            width: "95%"
+        }
+    }
+    for (var selector in config) {
+        $(selector).chosen(config[selector]);
+    }
+
+    // 填写每日金额动作
+    $('#btn-price').on('click', function(){
+        // 先清空内容
+        $('#div-date-price').empty();
+        var begin = $('#date-begin').val();
+        var end = $('#date-end').val();
+        if(!begin || !end){
+            parent.layer.alert('请选择订单开始和结束日期', {
+                skin: 'layui-layer-molv', //样式类名
+                shift: 6 //动画类型
+            }, function(index){
+                parent.layer.close(index);
+            });
+            return;
+        }
+        var days = getDays(begin, end);
+        var form_html = createDatePriceFormHtml(begin, days);
+        $('#div-date-price').append(form_html);
+    })
+        
+    // 监听每日价格变化 自动计算总价
+    $('body').on('input change propertychange', '.per-day-price', function(){
+        var total_price = 0;
+        $('.per-day-price').each(function(){
+            total_price += Number($(this).val());
+        });
+        $('.total-price').val(total_price);
+    })
+    // 监听平台抽成 自动计算利润
+    $('body').on('input change propertychange', '.total-price, .deduct-price', function(){
+        var profit_price = Number($('.total-price').val()) - Number($('.deduct-price').val());
+        $('.profit-price').val(profit_price);
+    })
+
+    // 客人是否已注册选择按钮
+    var switch_customer = document.querySelector('.js-switch');
+    var switchery = new Switchery(switch_customer, {
+        color: '#1AB394'
+    });
+
+    // 监听选择客人按钮
+    $('#switch-customer').on('change', function(){
+        if(switch_customer.checked){
+            $('#div-search-customer').append(
+                `<input id="search-customer-mobile" type="text" placeholder="请填写客人手机号" class="form-control">
+                <span class="input-group-btn">
+                    <button id="btn-search-customer" type="button" class="btn btn-primary">搜索</button>
+                    <button id="btn-searched-customer" type="button" class="btn btn-default" style="display:none">已注册</button>
+                    <div class="sk-spinner sk-spinner-cube-grid" style="display:none">
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                        <div class="sk-cube"></div>
+                    </div>
+                </span>`
+            );
+        }else{
+            $('#div-search-customer').empty();
+        }
+    })
+    // 监听搜索客人按钮
+    $('body').on('click', '#btn-search-customer', function(){
+        // 搜索按钮改为加载动画
+        $('#btn-search-customer').hide();
+        $('.sk-spinner-cube-grid').show();
+        var customer = ajax_checkCustomer($('#search-customer-mobile').val());
+    })
+
+    // 根据手机号查询客人信息
+    function ajax_checkCustomer(mobile){
+        var url = "{:url('customer/ajax_checkCustomer')}";
+        var data = {
+            "mobile":mobile
+        }
+        $.post(url, data, function(res){
+            if(res.code != 1){
+                parent.layer.alert(res.msg, {
+                    skin: 'layui-layer-molv', //样式类名
+                    shift: 6 //动画类型
+                }, function(index){
+                    parent.layer.close(index);
+                    //加载动画去除
+                    $('.sk-spinner-cube-grid').hide();
+                    $('#btn-search-customer').show();
+                    //清空input框
+                    $('#search-customer-mobile').val('');
+                });
+                return;
+            }
+            if(res.code == 1){
+                parent.layer.alert(res.msg, {
+                    skin: 'layui-layer-molv', //样式类名
+                    shift: 1 //动画类型
+                }, function(index){
+                    parent.layer.close(index);
+                    //加载动画去除
+                    $('.sk-spinner-cube-grid').hide();
+                    $('#btn-searched-customer').show();
+                    //input框内容改为客人id 并禁止修改
+                    $('#search-customer-mobile').val(res.data.id);
+                    $('#search-customer-mobile').prop('readonly', true);
+                });
+                return;
+            }
+        })
+    }
+    
+    // 创建日期-价格表单
+    function createDatePriceFormHtml(begin, days){
+        var html = `<form role="form" class="">`;
+        for(var i = 0; i < days; i++){
+            var cur_date = getDateStr(begin, i);
+            var next_date = getDateStr(begin, i+1);
+            html += `<div class="form-group">
+                        `+ cur_date + ` - ` + next_date +`
+                        <input type="number" data-cur_timestamp=`+getTimestamp(begin, i) + 
+                            ` data-next_timestamp=`+getTimestamp(begin, i+1) + 
+                            ` placeholder="请填写房间当天价格" class="form-control per-day-price">
+                    </div>`;
+        }
+        html += `<div class="form-group">
+                    总价
+                    <input type="number" placeholder="请填写订单总价" class="form-control total-price">
+                </div>
+                <div class="form-group">
+                    平台
+                    <input type="number" placeholder="请填写平台抽成" class="form-control deduct-price">
+                </div>
+                <div class="form-group">
+                    利润
+                    <input type="number" placeholder="请填写净利润" class="form-control profit-price">
+                </div>
+                </form>`;
+        return html;
+    }
+
+    //提交表单动作
+    var lock = false;
+    $('#btn-submit').on('click', function(){
+        if(lock) return;
+        lock = true;
+
+        var room_id = $('#select-room').val();//房间
+            if(!validate(room_id, '您还未选择房间哦,亲')) return;
+
+        var platform_id = $('#select-platform').val();//平台
+            if(!validate(platform_id, '您还未选择平台哦,亲')) return;
+
+        var total_price = $('.total-price').val();//订单总价
+            if(!validate(total_price, '您还未填写订单总价哦,亲')) return;
+
+        var deduct_price = $('.deduct-price').val();//平台抽成
+            // validate(deduct_price, '');
+
+        var profit_price = $('.profit-price').val();//净利润
+            if(!validate(profit_price, '您还未填写利润哦,亲')) return;
+
+        var begin = $('#date-begin').val();//起租日期
+            if(!validate(begin, '您还未选择起租日期哦,亲')) return;
+
+        var end = $('#date-end').val();//退房日期
+            if(!validate(end, '您还未选择退房日期哦,亲')) return;
+
+        var days = getDays(begin, end);//入住天数
+            if(!validate(days, '您的起租日期和退房日期是同一天哦,亲')) return;
+
+        var date_price = [];
+        $('.per-day-price').each(function(i, e){
+            date_price[i] = {
+                'begin':e.dataset.cur_timestamp,
+                'end':e.dataset.next_timestamp,
+                'price':e.value
+            }
+        })
+            if(!validate(date_price.length, '您还有每日价格未填写哦,亲')) return;
+        
+        // 客人id
+        if(switch_customer.checked){
+            if(!validate($('#search-customer-mobile').val(), '您选择了客人已注册,但未找到客人信息哦,亲')) return;
+            var customer_id = $('#search-customer-mobile').val();
+        }else{
+            var customer_id = 0;
+        }
+
+        // 去除提交按钮 改为加载动画
+        $('#btn-submit').hide();
+        $('.sk-spinner-wandering-cubes').show();
+
+        var url = "{:url('order/doAdd')}";
+        var data = {
+            'order':{
+                'room_id':room_id,
+                'platform_id':platform_id,
+                'total_price':total_price,
+                'deduct_price':deduct_price,
+                'profit_price':profit_price,
+                'begin':getTimestamp(begin, 0),
+                'end':getTimestamp(end, 0),
+                'days':days,
+                'customer_id':customer_id
+            },
+            'order_date_price':date_price
+        }
+        $.post(url, data, function(res){
+            if(res.code != 1){
+                parent.layer.alert(res.msg, {
+                    skin: 'layui-layer-molv', //样式类名
+                    shift: 6 //动画类型
+                }, function(index){
+                    parent.layer.close(index);
+                    //加载动画去除
+                    $('.sk-spinner-wandering-cubes').hide();
+                    $('#btn-submit').show();
+                    lock = false;
+                });
+                return;
+            }
+            if(res.code == 1){
+                parent.layer.alert(res.msg, {
+                    skin: 'layui-layer-molv', //样式类名
+                    shift: 1 //动画类型
+                }, function(index){
+                    parent.layer.close(index);
+                    //跳转到订单列表页
+                    window.location.href = "{:url('order/index')}";
+                    lock = false;
+                });
+                return;
+            }
+        })
+    })
+    
+    // 提交前验证
+    function validate(param, msg){
+        if(!param || param == '0' || param =='undefined' || param < 0){
+            parent.layer.alert(msg, {
+                skin: 'layui-layer-molv', //样式类名
+                shift: 6 //动画类型
+            }, function(index){
+                parent.layer.close(index);
+            });
+            return false;
+        }
+        return true;
+    }
+
+    // 计算两个日期差多少天
+    function getDays(begin, end){
+        begin = Date.parse(begin) / 1000;
+        end = Date.parse(end) / 1000;
+        var days_timestamp = end - begin;
+        var days = days_timestamp / (24*60*60);
+        return days;
+    }
+
+    // 计算日期根据天数的相对日期
+    function getDateStr(begin, days) { 
+        var timestamp = Date.parse(begin) / 1000 + days*24*60*60;
+        var date_timestamp = new Date(timestamp * 1000)
+        // var Y = date_timestamp.getFullYear();
+        var m = date_timestamp.getMonth() + 1;
+        var d = date_timestamp.getDate();
+        // if(m < 10) m = '0' + m;
+        // if(d < 10) d = '0' + d;
+        // return Y + '-' + m + '-' + d;
+        return m + '月' + d + '日';
+    }
+    
+    // 计算日期根据天数的相对时间戳
+    function getTimestamp(begin, days){
+        return Date.parse(begin) / 1000 + days*24*60*60;
+    }
+
+</script>
+</body>
+</html>
