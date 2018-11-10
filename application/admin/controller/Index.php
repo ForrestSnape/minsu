@@ -73,7 +73,7 @@ class Index extends Base
         $rooms_profits = $this->getProfitInTime($begin_end['begin'], $begin_end['end']);
         $sum_rent = 0;//总房租
         foreach($rooms_profits as $k => $room_profits){
-            $rooms_profits[$k]['total_rent'] = $room_profits['total'] - $room_profits['rent_month'];
+            $rooms_profits[$k]['total_rent'] = round($room_profits['total'] - $room_profits['rent_month'], 2);
             $sum_rent += $room_profits['rent_month'];
         }
         //计算平台合计利润
@@ -92,12 +92,14 @@ class Index extends Base
                     }
                 }
             }
+            $platforms_total_profit[$k1]['profit'] = round($platforms_total_profit[$k1]['profit'], 2);
         }
         $total = 0;
         foreach($platforms_total_profit as $k => $v){
             $total += $v['profit'];
         }
-        $total_rent = $total - $sum_rent;
+        $total = round($total, 2);
+        $total_rent = round($total - $sum_rent, 2);
         $result = [];
         $result['rooms'] = $rooms_profits;
         $result['platforms'] = $platforms_total_profit;
@@ -188,7 +190,7 @@ class Index extends Base
                 ];
                 $total += $profit;
             }
-            $rooms[$k1]['total'] = $total;
+            $rooms[$k1]['total'] = round($total, 2);
         }
         return $rooms;
     }

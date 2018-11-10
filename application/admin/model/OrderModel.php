@@ -202,6 +202,6 @@ class OrderModel extends Model
             'end' => ['<=', $end]
         ];
         $profit = $this->where($condition)->sum('profit_price');
-        return number_format($profit, 2);
+        return $profit;
     }
 }
