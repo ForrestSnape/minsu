@@ -188,6 +188,38 @@ class OrderModel extends Model
     }
 
     /**
+     * 查询指定房间指定时间段内的利润
+     * @param $room_id 房间ID
+     * @param $begin 开始时间
+     * @param $end 结束时间
+     */
+    public function getProfitByRoomIdInTime($room_id, $begin, $end){
+        $condition = [
+            'room_id' => $room_id,
+            'begin' => ['>=', $begin],
+            'end' => ['<=', $end]
+        ];
+        $profit = $this->where($condition)->sum('profit_price');
+        return $profit;
+    }
+
+    /**
+     * 查询指定平台指定时间段内的利润
+     * @param $platform_id 平台ID
+     * @param $begin 开始时间
+     * @param $end 结束时间
+     */
+    public function getProfitByPlatformIdInTime($platform_id, $begin, $end){
+        $condition = [
+            'platform_id' => $platform_id,
+            'begin' => ['>=', $begin],
+            'end' => ['<=', $end]
+        ];
+        $profit = $this->where($condition)->sum('profit_price');
+        return $profit;
+    }
+
+    /**
      * 查询指定房间指定平台指定时间段内的利润
      * @param $room_id 房间ID
      * @param $platform_id 平台ID

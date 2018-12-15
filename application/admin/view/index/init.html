@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,34 +12,35 @@
     <link href="__CSS__/plugins/datapicker/datepicker3.css" rel="stylesheet">
     <link href="__CSS__/style.min.css?v=4.1.0" rel="stylesheet">
 </head>
+
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated bounceIn">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>A Gift For Kristin</h5>
+    <div class="wrapper wrapper-content animated bounceIn">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>A Gift For Kristin</h5>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>房间统计</h4>
-                </div>
-                <div class="ibox-content">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>房间</th>
-                                <th>总订单数</th>
-                                <th>总出租天数</th>
-                                <th>总订单金额</th>
-                                <th>总利润</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {volist name="room_statistics" id="room_statistic"}
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>房间统计</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>房间</th>
+                                    <th>总订单数</th>
+                                    <th>总出租天数</th>
+                                    <th>总订单金额</th>
+                                    <th>总利润</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name="room_statistics" id="room_statistic"}
                                 <tr>
                                     <td>{$room_statistic.name}</td>
                                     <td><span class="label label-warning">{$room_statistic.num}</span></td>
@@ -46,30 +48,30 @@
                                     <td>{$room_statistic.total_price}</td>
                                     <td><span class="label label-danger">{$room_statistic.profit_price}</span></td>
                                 </tr>
-                            {/volist}
-                        </tbody>
-                    </table>
+                                {/volist}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>平台统计</h4>
-                </div>
-                <div class="ibox-content">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>平台</th>
-                                <th>总订单数</th>
-                                <th>总出租天数</th>
-                                <th>总订单金额</th>
-                                <th>总利润</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {volist name="platform_statistics" id="platform_statistic"}
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>平台统计</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>平台</th>
+                                    <th>总订单数</th>
+                                    <th>总出租天数</th>
+                                    <th>总订单金额</th>
+                                    <th>总利润</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name="platform_statistics" id="platform_statistic"}
                                 <tr>
                                     <td>{$platform_statistic.name}</td>
                                     <td><span class="label label-warning">{$platform_statistic.num}</span></td>
@@ -77,87 +79,131 @@
                                     <td>{$platform_statistic.total_price}</td>
                                     <td><span class="label label-danger">{$platform_statistic.profit_price}</span></td>
                                 </tr>
-                            {/volist}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <!-- 月度利润-->
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <div class="input-group date month-profit-date">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input type="text" class="form-control month-profit-date-input" value="{$y_m_str}" readonly="readonly">
+                                {/volist}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="ibox-content">
-                    <table class="table table-hover" id="month-profit-table">
-                    </table>
+            </div>
+            <!-- 房间年度利润折线图 -->
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="input-group date year-room-profit-line-date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control year-room-profit-line-date-input" value="{$y_str}"
+                                readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="ibox-content year-room-profit-line-content">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                        <div class="echarts" style="display: none"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h4>今日房间</h4>
+            <!-- 平台年度利润折线图 -->
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="input-group date year-platform-profit-line-date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control year-platform-profit-line-date-input" value="{$y_str}"
+                                readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="ibox-content year-platform-profit-line-content">
+                        <div class="sk-spinner sk-spinner-wave">
+                            <div class="sk-rect1"></div>
+                            <div class="sk-rect2"></div>
+                            <div class="sk-rect3"></div>
+                            <div class="sk-rect4"></div>
+                            <div class="sk-rect5"></div>
+                        </div>
+                        <div class="echarts" style="display: none"></div>
+                    </div>
                 </div>
-                <div class="ibox-content">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>房间</th>
-                                <th>客人退房</th>
-                                <th>客人入住</th>
-                                <th>客人居住中...</th>
-                                <th>需要打扫</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {volist name="rooms_status_today" id="room_status_today"}
+            </div>
+            <!-- 月度利润-->
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="input-group date month-profit-date">
+                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control month-profit-date-input" value="{$y_m_str}" readonly="readonly">
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover" id="month-profit-table">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h4>今日房间</h4>
+                    </div>
+                    <div class="ibox-content">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>房间</th>
+                                    <th>客人退房</th>
+                                    <th>客人入住</th>
+                                    <th>客人居住中...</th>
+                                    <th>需要打扫</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {volist name="rooms_status_today" id="room_status_today"}
                                 <tr>
                                     <td>{$room_status_today.name}</td>
                                     <td>
                                         {if condition="$room_status_today.e_order"}
-                                            <span class="label label-primary">是</span>
-                                            <a href="{:url('order/detail')}?id={$room_status_today.e_order.id}">
-                                                <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
-                                            </a>
+                                        <span class="label label-primary">是</span>
+                                        <a href="{:url('order/detail')}?id={$room_status_today.e_order.id}">
+                                            <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
+                                        </a>
                                         {else /}否
                                         {/if}
                                     </td>
                                     <td>
                                         {if condition="$room_status_today.b_order"}
-                                            <span class="label label-primary">是</span>
-                                            <a href="{:url('order/detail')}?id={$room_status_today.b_order.id}">
-                                                <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
-                                            </a>
+                                        <span class="label label-primary">是</span>
+                                        <a href="{:url('order/detail')}?id={$room_status_today.b_order.id}">
+                                            <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
+                                        </a>
                                         {else /}否
                                         {/if}
                                     </td>
                                     <td>
                                         {if condition="$room_status_today.c_order"}
-                                            <span class="label label-primary">是</span>
-                                            <a href="{:url('order/detail')}?id={$room_status_today.c_order.id}">
-                                                <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
-                                            </a>
+                                        <span class="label label-primary">是</span>
+                                        <a href="{:url('order/detail')}?id={$room_status_today.c_order.id}">
+                                            <span class="label label-info">查看订单 <i class="fa fa-arrow-right"></i></span>
+                                        </a>
                                         {/if}
                                     </td>
                                     <td>
                                         {if condition="$room_status_today.e_order"}
-                                            <span class="label label-danger">是</span>
+                                        <span class="label label-danger">是</span>
                                         {else /}否
                                         {/if}
                                     </td>
                                 </tr>
-                            {/volist}
-                        </tbody>
-                    </table>
+                                {/volist}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-sm-6">
+            <!-- <div class="col-sm-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h4>明日房间</h4>
@@ -215,83 +261,214 @@
                     </table>
                 </div>
             </div>
+        </div> -->
         </div>
     </div>
-</div>
 
-<script src="__JS__/jquery.min.js?v=2.1.4"></script>
-<script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
-<script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="__JS__/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="__JS__/plugins/layer/layer.min.js"></script>
-<script src="__JS__/hplus.min.js?v=4.1.0"></script>
-<script src="__JS__/plugins/datapicker/bootstrap-datepicker.js"></script>
-<!--<script type="text/javascript" src="__JS__/contabs.min.js"></script>-->
-<script type="text/javascript" src="__JS__/contabs.js"></script>
-<script src="__JS__/plugins/pace/pace.min.js"></script>
-<script type="text/javascript">
-    // 月份-订单-柱状图日期选择动作
-    $('.month-profit-date').each(function(i, e){
-        $(this).datepicker({
-            minViewMode: 1,
-            keyboardNavigation: false,
-            forceParse: false,
-            autoclose: true,
-            todayHighlight: true,
-            format:"yyyy-mm"
-        }).on('changeDate', function(){
-            var month = $(this).children('.month-profit-date-input').val().substr(5) - 0;
-            changeMonthForProfit(month)
+    <script src="__JS__/jquery.min.js?v=2.1.4"></script>
+    <script src="__JS__/bootstrap.min.js?v=3.3.6"></script>
+    <script src="__JS__/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="__JS__/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="__JS__/plugins/layer/layer.min.js"></script>
+    <script src="__JS__/hplus.min.js?v=4.1.0"></script>
+    <script src="__JS__/plugins/datapicker/bootstrap-datepicker.js"></script>
+    <script src="__JS__/plugins/echarts/echarts-all.js"></script>
+    <!--<script type="text/javascript" src="__JS__/contabs.min.js"></script>-->
+    <script type="text/javascript" src="__JS__/contabs.js"></script>
+    <script src="__JS__/plugins/pace/pace.min.js"></script>
+    <script type="text/javascript">
+        //页面初始化执行方法
+        var date = new Date();
+        var cur_year = date.getFullYear();
+        changeYearForRoomProfitLine(cur_year);
+        changeYearForPlatformProfitLine(cur_year);
+
+        // 月份-订单-柱状图日期选择动作
+        $('.month-profit-date').each(function (i, e) {
+            $(this).datepicker({
+                minViewMode: 1,
+                keyboardNavigation: false,
+                forceParse: false,
+                autoclose: true,
+                todayHighlight: true,
+                format: "yyyy-mm"
+            }).on('changeDate', function () {
+                var month = $(this).children('.month-profit-date-input').val().substr(5) - 0;
+                changeMonthForProfit(month)
+            });
         });
-    });
 
-    //初始化为当前月利润
-    changeMonthForProfit({$m_str});
-    //更改月份获取利润动作
-    function changeMonthForProfit(month){
-        var url = "{:url('index/ajax_getMonthProfit')}";
-        var data = {
-            "month": month
-        }
-        $.post(url, data, function(res){
-            var html = createMonthForProfit(res);
-            $('#month-profit-table').empty().append(html);
-        })
-    }
+        //初始化为当前月利润
+        changeMonthForProfit({$m_str});
 
-    //获取月份利润填充数据
-    function createMonthForProfit(data){
-        var rooms = data['rooms'];
-        var platforms = data['platforms'];
-        var total = data['total'];
-        var total_rent = data['total_rent'];
-        var html = '';
-        html += `<thead><tr><th>月度利润</th>`;
-        for(var i = 0; i < rooms[0].profits.length; i++){
-            var profit = rooms[0].profits[i];
-            html += `<th>` + profit['platform_name'] + `</th>`;
-        }
-        html += `<th>房间总计</th><th>去掉房租</th></tr></thead>`;
-        html += `<tbody>`;
-        for(var i = 0; i < rooms.length; i++){
-            var room_profit = rooms[i];
-            html += `<tr><td>` + room_profit['name'] + `</td>`;
-            for(var j = 0; j < room_profit.profits.length; j++){
-                var profit = room_profit.profits[j];
-                html += `<td>` + profit['profit'] + '</td>';
+        //更改月份获取利润动作
+        function changeMonthForProfit(month) {
+            var url = "{:url('index/ajax_getMonthProfit')}";
+            var data = {
+                "month": month
             }
-            html += `<td><span class="label label-warning">` + room_profit['total'] + `</span></td>`;
-            html += `<td><span class="label label-info">` + room_profit['total_rent'] + `</span></td></tr>`;
+            $.post(url, data, function (res) {
+                var html = createMonthForProfit(res);
+                $('#month-profit-table').empty().append(html);
+            })
         }
-        html += `<tr><td>平台总计</td>`;
-        for(var i = 0; i < platforms.length; i++){
-            html += `<td><span class="label label-warning">` + platforms[i]['profit'] + `</span></td>`;
+
+        //获取月份利润填充数据
+        function createMonthForProfit(data) {
+            var rooms = data['rooms'];
+            var platforms = data['platforms'];
+            var total = data['total'];
+            var total_rent = data['total_rent'];
+            var html = '';
+            html += `<thead><tr><th>月度利润</th>`;
+            for (var i = 0; i < rooms[0].profits.length; i++) {
+                var profit = rooms[0].profits[i];
+                html += `<th>` + profit['platform_name'] + `</th>`;
+            }
+            html += `<th>房间总计</th><th>去掉房租</th></tr></thead>`;
+            html += `<tbody>`;
+            for (var i = 0; i < rooms.length; i++) {
+                var room_profit = rooms[i];
+                html += `<tr><td>` + room_profit['name'] + `</td>`;
+                for (var j = 0; j < room_profit.profits.length; j++) {
+                    var profit = room_profit.profits[j];
+                    html += `<td>` + profit['profit'] + '</td>';
+                }
+                html += `<td><span class="label label-warning">` + room_profit['total'] + `</span></td>`;
+                html += `<td><span class="label label-info">` + room_profit['total_rent'] + `</span></td></tr>`;
+            }
+            html += `<tr><td>平台总计</td>`;
+            for (var i = 0; i < platforms.length; i++) {
+                html += `<td><span class="label label-warning">` + platforms[i]['profit'] + `</span></td>`;
+            }
+            html += `<td><span class="label label-danger">` + total + `</span></td>`;
+            html += `<td><span class="label label-primary">` + total_rent + `</span></td></tr>`;
+            html += `</tbody>`;
+            return html;
         }
-        html += `<td><span class="label label-danger">` + total + `</span></td>`;
-        html += `<td><span class="label label-primary">` + total_rent + `</span></td></tr>`;
-        html += `</tbody>`;
-        return html;
-    }
-</script>
+
+        // //年份-订单-折线图日期选择动作
+        // $('.year-room-profit-line-content').each(function(i, e){
+        //     $(this).datepicker({
+        //         startView: 2,
+        //         todayBtn: "linked",
+        //         keyboardNavigation: false,
+        //         forceParse: false,
+        //         autoclose: true,
+        //         format:"yyyy"
+        //     }).on('changeDate', function(){
+        //         var year = $(this).children('.year-room-profit-line-date-input').val() - 0;
+        //         changeYearForRoomProfitLine(year)
+        //     });
+        // });
+        //房间-利润-折线图切换年份份动作
+        function changeYearForRoomProfitLine(year) {
+            $('.year-room-profit-line-content').each(function (i, e) {
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('index/ajax_getYearRoomProfit')}";
+                var data = {
+                    "year": year
+                }
+                $.post(url, data, function (res) {
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createYearRoomProfitLine(this_e.children('.echarts'), res);
+                })
+            });
+        }
+        //房间-利润-折线图数据填充
+        function createYearRoomProfitLine(e, data) {
+            var lineChart = echarts.init(e.get(0));
+            var legendData = data.map(item => item.room.name);
+            var xAxisData = [1,2,3,4,5,6,7,8,9,10,11,12];
+            var seriesData = data.map(item => ({name: item.room.name, type: 'line', data: item.profit}));
+            var lineoption = {
+                title: {
+                    text: '房间年利润统计'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{a0}: {c0}<br />{a1}: {c1}<br />{a2}: {c2}<br />{a3}: {c3}'
+                },
+                legend: {
+                    data: legendData
+                },
+                grid: {
+                    x: 40,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: xAxisData
+                }],
+                yAxis: [{
+                    type: 'value',
+                }],
+                series: seriesData,
+            };
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        }
+
+        //平台-利润-折线图切换年份份动作
+        function changeYearForPlatformProfitLine(year) {
+            $('.year-platform-profit-line-content').each(function (i, e) {
+                var this_e = $(this);
+                this_e.children('.sk-spinner-wave').show();
+                this_e.children('.echarts').hide();
+                var url = "{:url('index/ajax_getYearPlatformProfit')}";
+                var data = {
+                    "year": year
+                }
+                $.post(url, data, function (res) {
+                    this_e.children('.sk-spinner-wave').hide();
+                    this_e.children('.echarts').show();
+                    createYearPlatformProfitLine(this_e.children('.echarts'), res);
+                })
+            });
+        }
+        //房间-利润-折线图数据填充
+        function createYearPlatformProfitLine(e, data) {
+            var lineChart = echarts.init(e.get(0));
+            var legendData = data.map(item => item.platform.name);
+            var xAxisData = [1,2,3,4,5,6,7,8,9,10,11,12];
+            var seriesData = data.map(item => ({name: item.platform.name, type: 'line', data: item.profit}));
+            var lineoption = {
+                title: {
+                    text: '平台年利润统计'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: '{a0}: {c0}<br />{a1}: {c1}<br />{a2}: {c2}<br />{a3}: {c3}'
+                },
+                legend: {
+                    data: legendData
+                },
+                grid: {
+                    x: 40,
+                    x2: 40,
+                    y2: 24
+                },
+                calculable: true,
+                xAxis: [{
+                    type: 'category',
+                    boundaryGap: false,
+                    data: xAxisData
+                }],
+                yAxis: [{
+                    type: 'value',
+                }],
+                series: seriesData,
+            };
+            lineChart.setOption(lineoption);
+            $(window).resize(lineChart.resize);
+        }
+    </script>
 </body>
+
 </html>
