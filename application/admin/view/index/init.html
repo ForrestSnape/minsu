@@ -383,7 +383,7 @@
             var lineChart = echarts.init(e.get(0));
             var legendData = data.map(item => item.room.name);
             var xAxisData = [1,2,3,4,5,6,7,8,9,10,11,12];
-            var seriesData = data.map(item => ({name: item.room.name, type: 'line', data: item.profit}));
+            var seriesData = data.map(item => ({name: item.room.name, type: 'line', smooth:true, data: item.profit}));
             var lineoption = {
                 title: {
                     text: '房间年利润统计'
@@ -437,7 +437,7 @@
             var lineChart = echarts.init(e.get(0));
             var legendData = data.map(item => item.platform.name);
             var xAxisData = [1,2,3,4,5,6,7,8,9,10,11,12];
-            var seriesData = data.map(item => ({name: item.platform.name, type: 'line', data: item.profit}));
+            var seriesData = data.map(item => ({name: item.platform.name, type: 'line', smooth:true, data: item.profit}));
             var lineoption = {
                 title: {
                     text: '平台年利润统计'
